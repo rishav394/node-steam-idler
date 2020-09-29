@@ -5,7 +5,7 @@ export const buildBot = (config: {
   username: string;
   password: string;
   sharedSecret?: string;
-  games: string[];
+  games: number[];
 }) => {
   const user = new SteamUser({
     promptSteamGuardCode: false,
