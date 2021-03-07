@@ -26,6 +26,7 @@ export const buildBot = (config: {
     );
     user.setPersona(SteamUser.EPersonaState.Online);
     user.gamesPlayed(user.games);
+    user.setPersona(7);
     console.log(`[${user.username}] Idling ${user.games.join(" ")}`);
   });
 
@@ -43,22 +44,22 @@ export const buildBot = (config: {
     });
   };
 
-  user.on("steamGuard", function (
-    domain: any,
-    callback: (arg0: string) => void
-  ) {
-    if (!user.sharedSecret) {
-      const readlineSync = require("readline-sync");
-      const authCode = readlineSync.question(
-        `[${user.username}] Steam Guard` + (!domain ? " App" : "") + " Code: "
-      );
-      callback(authCode);
-    } else {
-      const authCode = SteamTotp.generateAuthCode(user.sharedSecret);
-      console.log("[" + user.username + "] Generated Auth Code: " + authCode);
-      callback(authCode);
+  user.on(
+    "steamGuard",
+    function (domain: any, callback: (arg0: string) => void) {
+      if (!user.sharedSecret) {
+        const readlineSync = require("readline-sync");
+        const authCode = readlineSync.question(
+          `[${user.username}] Steam Guard` + (!domain ? " App" : "") + " Code: "
+        );
+        callback(authCode);
+      } else {
+        const authCode = SteamTotp.generateAuthCode(user.sharedSecret);
+        console.log("[" + user.username + "] Generated Auth Code: " + authCode);
+        callback(authCode);
+      }
     }
-  });
+  );
 
   user.on("vacBans", function (numBans: string | number, appids: any[]) {
     if (numBans > 0) {
@@ -71,31 +72,30 @@ export const buildBot = (config: {
     }
   });
 
-  user.on("accountLimitations", function (
-    limited: any,
-    communityBanned: any,
-    locked: any
-  ) {
-    const limitations = [];
+  user.on(
+    "accountLimitations",
+    function (limited: any, communityBanned: any, locked: any) {
+      const limitations = [];
 
-    if (limited) {
-      limitations.push("LIMITED");
-    }
+      if (limited) {
+        limitations.push("LIMITED");
+      }
 
-    if (communityBanned) {
-      limitations.push("COMMUNITY BANNED");
-    }
+      if (communityBanned) {
+        limitations.push("COMMUNITY BANNED");
+      }
 
-    if (locked) {
-      limitations.push("LOCKED");
-    }
+      if (locked) {
+        limitations.push("LOCKED");
+      }
 
-    if (limitations.length !== 0) {
-      console.log(
-        `[${user.username}] Limitations: ` + limitations.join(", ") + "."
-      );
+      if (limitations.length !== 0) {
+        console.log(
+          `[${user.username}] Limitations: ` + limitations.join(", ") + "."
+        );
+      }
     }
-  });
+  );
 
   return user;
 };
