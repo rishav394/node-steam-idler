@@ -9,3 +9,7 @@ README.md
 LICENSE
 .vscode
 fabfile.py
+.env
+build
+sentry
+__pycache__

@@ -10,7 +10,7 @@ RUN npm install
 
 COPY . .
 
-RUN npm run build
+RUN npm run build && npm prune --production && rm -rf src
 
 # Start
 CMD [ "npm", "run", "prod" ]
