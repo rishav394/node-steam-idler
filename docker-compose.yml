@@ -1,0 +1,7 @@
+version: "3.8"
+services:
+  node-idler:
+    command: npm run prod
+    image: rishav394/node-steamidler
+    container_name: hourbooster
+    env_file: .env
